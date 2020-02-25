@@ -9,3 +9,4 @@ commands:
   plugins:
   help:
   ?:
+  trade:

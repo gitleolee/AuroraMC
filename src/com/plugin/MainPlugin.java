@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.plugin.Commands.HelpCmd;
 import com.plugin.Commands.PluginCmd;
 import com.plugin.Commands.StaffChat;
+import com.plugin.Commands.TradeCmd;
 import com.plugin.Events.ChatEvents;
 import com.plugin.Events.ClassSetter;
 import com.plugin.Events.Join;
@@ -18,6 +19,7 @@ public class MainPlugin extends JavaPlugin {
 		this.saveDefaultConfig();
 		
 		SpeedPerks.start();
+		
 		
 		registerEvents();
 		registerCommands();
@@ -36,6 +38,7 @@ public class MainPlugin extends JavaPlugin {
 		registerCommand(new PluginCmd(), "plugins");
 		registerCommand(new HelpCmd(), "help");
 		registerCommand(new HelpCmd(), "?");
+		registerCommand(new TradeCmd(), "trade");
 	}
 	
 	private void registerEvent(Listener l) {

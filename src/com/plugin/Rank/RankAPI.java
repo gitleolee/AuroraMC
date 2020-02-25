@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 
 import com.plugin.MainPlugin;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class RankAPI {
 	
 	static MainPlugin instance = MainPlugin.getPlugin(MainPlugin.class);
@@ -11,10 +13,15 @@ public class RankAPI {
 	public static void setRank(Player p, Ranks r) {
 		instance.getConfig().set(p.getUniqueId() + ".Rank", rankToString(r));
 		instance.saveConfig();
+		reloadTab(p);
 	}
 	
 	public static Ranks getRank(Player p) {
 		return stringToRank(instance.getConfig().getString(p.getUniqueId() + ".Rank", "Default"));
+	}
+	
+	public static void reloadTab(Player p) {
+		p.setPlayerListName(getRank(p).getPrefix() + ChatColor.WHITE + p.getDisplayName());
 	}
 	
 	public static String rankToString(Ranks r) {

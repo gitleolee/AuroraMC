@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.plugin.Class.ClassAPI;
 import com.plugin.Class.Classes;
+import com.plugin.Rank.RankAPI;
 import com.plugin.items.ItemAPI;
 
 public class Join implements Listener {
@@ -16,6 +17,7 @@ public class Join implements Listener {
 	@EventHandler
 	public static void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
+		RankAPI.reloadTab(p);
 		e.setJoinMessage(null);
 		p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(122);
 		if(ClassAPI.getClass(p) == Classes.NO_CLASS) {
