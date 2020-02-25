@@ -1,0 +1,11 @@
+name: AuroraMC
+version: 1.2
+main: com.plugin.MainPlugin
+
+commands:
+  staffchat:
+  sc:
+  pl:
+  plugins:
+  help:
+  ?:
