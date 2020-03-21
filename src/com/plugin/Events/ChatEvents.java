@@ -9,6 +9,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import com.plugin.Class.ClassAPI;
 import com.plugin.Class.Classes;
 import com.plugin.Rank.RankAPI;
+import com.plugin.Rank.Ranks;
 
 public class ChatEvents implements Listener {
 	
@@ -21,7 +22,10 @@ public class ChatEvents implements Listener {
 	private static void chatFormat(String msg, Player sender) {
 		for(Player p : sender.getWorld().getPlayers()) {
 			String pC = (ClassAPI.getClass(sender) == Classes.NO_CLASS) ? "" : ChatColor.DARK_PURPLE + ("(" + ClassAPI.classToString(ClassAPI.getClass(sender)) + ")");
-			p.sendMessage(RankAPI.getRank(sender).getPrefix() + ChatColor.translateAlternateColorCodes('&', "&f") + pC + ChatColor.WHITE + sender.getDisplayName()  + ": " + ChatColor.GOLD + msg);
+			if(RankAPI.getRank(sender).getPriority() <= Ranks.Warlock.getPriority()) {
+				msg = ChatColor.translateAlternateColorCodes('&', msg);
+			}
+			p.sendMessage(RankAPI.getRank(sender).getPrefix() + ChatColor.translateAlternateColorCodes('&', "&f") + pC + ChatColor.WHITE + sender.getDisplayName()  + ": " + ChatColor.AQUA + msg);
 		}
 	}
 	

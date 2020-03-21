@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class ItemAPI {
 	public static void unbreakable(ItemStack stack, boolean unbreakable) {
@@ -69,6 +70,18 @@ public class ItemAPI {
 		return stack;
 	}
 	
+	@SuppressWarnings("deprecation")
+	public static ItemStack createHeadItem(String name, String owner) {
+		ItemStack stack = new ItemStack(Material.PLAYER_HEAD);
+		hideFlags(stack);
+		unbreakable(stack, true);
+		setName(stack, name);
+		SkullMeta meta = (SkullMeta) stack.getItemMeta();
+		meta.setOwner(owner);
+		stack.setItemMeta(meta);
+		return stack;
+	}
+	
 	public static ItemStack createGuiItem(int count, Material mat, String name, String firstLore) {
 		ItemStack stack = new ItemStack(mat, count);
 		hideFlags(stack);
@@ -87,5 +100,9 @@ public class ItemAPI {
 	public static boolean isFirstLore(ItemStack stack, String firstLore) {
 		return stack.getItemMeta().getLore().get(0).equals(firstLore);
 				
+	}
+	
+	public static boolean isSword(ItemStack stack) {
+		return stack.getType().toString().toLowerCase().contains("sword");
 	}
 }

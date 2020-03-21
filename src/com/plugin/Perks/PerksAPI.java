@@ -23,12 +23,32 @@ public class PerksAPI {
 		instance.saveConfig();
 	}
 	
+	public static void removePerk(Player p, String s) {
+		
+		List<String> lists = instance.getConfig().getStringList(p.getUniqueId() + ".Perks");
+		if(lists == null) {
+			lists = new ArrayList<String>();
+		}
+		if(lists.contains(s)) {
+			lists.remove(s);
+		}
+		
+		
+		instance.getConfig().set(p.getUniqueId() + ".Perks", lists);
+		instance.saveConfig();
+	}
+	
 	public static List<String> getPerks(Player p) {
 		List<String> lists = instance.getConfig().getStringList(p.getUniqueId() + ".Perks");
 		if(lists == null) {
 			lists = new ArrayList<String>();
 		}
 		return lists;
+	}
+	
+	public static void removeAllPerks(Player p) {
+		instance.getConfig().set(p.getUniqueId() + ".Perks", null);
+		instance.saveConfig();
 	}
 	
 	public static boolean hasPerk(Player p, String s) {

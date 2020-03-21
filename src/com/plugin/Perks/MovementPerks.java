@@ -2,7 +2,11 @@ package com.plugin.Perks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.plugin.MainPlugin;
@@ -11,7 +15,9 @@ import com.plugin.Class.ClassAPI;
 import com.plugin.Class.Classes;
 import com.plugin.Events.TradeEvents;
 
-public class SpeedPerks {
+
+public class MovementPerks implements Listener {
+	
 	public static void start() {
 		
 		new BukkitRunnable(){
@@ -21,8 +27,17 @@ public class SpeedPerks {
 		    		if(!ClassAPI.getClass(p).equals(Classes.NO_CLASS)) {
 		    			p.setWalkSpeed((float) ((0.5 * (ClassAPI.getClass(p).getSpeed() / 5.0))));
 		    		} else {
-		    			p.setWalkSpeed(1);
+		    			p.setWalkSpeed(0.5f);
 		    		}
+		    		if(PerksAPI.hasPerk(p, "Secret Accessibility: ON")) {
+		    			p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10, 3, false, false), true);
+		    		}
+		    		
+		    		if(p.getWorld().getBlockAt(p.getLocation()).getType().equals(Material.STONECUTTER)) {
+		    			p.damage(2);
+		    		}
+		    		
+		    		
 		    	}
 		    	if(TradeEvents.tradeCooldown.isEmpty()) {
 		    		return;
@@ -43,4 +58,8 @@ public class SpeedPerks {
 		    }
 		}.runTaskTimer(MainPlugin.getPlugin(MainPlugin.class), 0, 10);
 	}
+	
+	
+	
+	
 }

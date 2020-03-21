@@ -1,6 +1,7 @@
 name: AuroraMC
 version: 1.2
 main: com.plugin.MainPlugin
+api-version: 1.13
 
 commands:
   staffchat:
@@ -10,3 +11,6 @@ commands:
   help:
   ?:
   trade:
+  changeclass:
+  builderspro:
+  bp:

@@ -21,21 +21,19 @@ public class TradeCmd implements CommandExecutor {
 			Player p = (Player) sender;
 			
 			if(args.length == 2) {
-				if(args[0] == "accept") {
-					if(isOnline(args[1]) && isPending(Bukkit.getPlayer(args[1]), p)) {
-						p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6AuroraMC&8] &6You accepted that player's trade request."));
-						Bukkit.getPlayer(args[1]).sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6AuroraMC&8] &6" + p.getDisplayName() + " accepted your trade request."));
-						Inventory sTU = Bukkit.createInventory(null, 5 * 9, "Trade with " + p);
+				if(args[0].equals("accept")) {
+					if(isOnline(args[1]) && isPending(p, Bukkit.getPlayer(args[1]))) {
+						Inventory sTU = Bukkit.createInventory(null, 5 * 9, "Trade with " + p.getDisplayName());
 						Inventory rTU = Bukkit.createInventory(null, 5 * 9, "Trade with " + Bukkit.getPlayer(args[1]).getDisplayName());
 						
 						p.openInventory(rTU);
 						Bukkit.getPlayer(args[1]).openInventory(sTU);
 						
-						TradeEvents.tradeCooldown.remove(new Trading(Bukkit.getPlayer(args[1]).getUniqueId(), p.getUniqueId()));
+						removeTrade(p, Bukkit.getPlayer(args[1]));
 					} else {
 						p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6AuroraMC&8] &6That player didn't send a pending trade request to you."));
 					}
-				} else if(args[0] == "deny") {
+				} else if(args[0].equals("deny")) {
 					if(isOnline(args[1]) && isPending(Bukkit.getPlayer(args[1]), p)) {
 						p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6AuroraMC&8] &6You denied that player's trade request."));
 						Bukkit.getPlayer(args[1]).sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6AuroraMC&8] &6" + p.getDisplayName() + " denied your trade request."));
@@ -50,8 +48,11 @@ public class TradeCmd implements CommandExecutor {
 			} else if(args.length == 1) {
 				if(isOnline(args[0])) {
 					Player receiver = Bukkit.getPlayer(args[0]);
-					if(TradeEvents.tradeCooldown.containsKey(new Trading(p.getUniqueId(), receiver.getUniqueId()))) {
-						
+					if(!isPending(receiver, p)) {
+						if(p == Bukkit.getPlayer(args[0])) {
+							p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6AuroraMC&8] &6You can't trade to yourself!"));
+							return true;
+						}
 						p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6AuroraMC&8] &6You sent " + receiver.getDisplayName() + " a trade request. It will expire in 60 seconds."));
 						receiver.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6AuroraMC&8] &6" + p.getDisplayName() + " sent a trade request. To accept, do /trade accept " + p.getDisplayName() + ". After &c60 &6seconds, the trade request will expire."));
 						TradeEvents.tradeCooldown.put(new Trading(p.getUniqueId(), receiver.getUniqueId()), 120);
@@ -85,6 +86,24 @@ public class TradeCmd implements CommandExecutor {
 	}
 	
 	private boolean isPending(Player receiver, Player sender) {
-		return TradeEvents.tradeCooldown.containsKey(new Trading(sender.getUniqueId(), receiver.getUniqueId()));
+		for(Trading trade : TradeEvents.tradeCooldown.keySet()) {
+			if(trade.sender.equals(sender.getUniqueId())) {
+				if(trade.receiver.equals(receiver.getUniqueId())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private void removeTrade(Player receiver, Player sender) {
+		for(Trading trade : TradeEvents.tradeCooldown.keySet()) {
+			if(trade.sender.equals(sender.getUniqueId())) {
+				if(trade.receiver.equals(receiver.getUniqueId())) {
+					TradeEvents.tradeCooldown.remove(trade);
+					break;
+				}
+			}
+		}
 	}
 }
