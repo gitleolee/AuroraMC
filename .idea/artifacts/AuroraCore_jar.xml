@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AuroraCore:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AuroraCore_jar</output-path>
+    <root id="archive" name="AuroraCore.jar">
+      <element id="module-output" name="AuroraCore" />
+      <element id="extracted-dir" path="D:/Downloads/spigot-1.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/Downloads/BungeeCord.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

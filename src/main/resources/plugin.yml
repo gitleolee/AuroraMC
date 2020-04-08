@@ -1,0 +1,15 @@
+name: AuroraCore
+main: com.plugin.MainPlugin
+version: 1.0
+author: DytroPlays
+
+commands:
+  setrank:
+  giverank:
+  adminchat:
+  modchat:
+  staffchat:
+  sc:
+  hub:
+  lobby:
+  spawn:
