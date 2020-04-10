@@ -34,8 +34,10 @@ public class MainPlugin extends JavaPlugin {
 	
 	private void registerEvents() {
 		registerEvent(new ChatEvents());
+
 		
 		registerEvent(new BasicHubSystem());
+		registerEvent(new ServerSelector());
 	}
 	
 	private void registerCommands() {

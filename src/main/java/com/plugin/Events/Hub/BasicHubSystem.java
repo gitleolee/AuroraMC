@@ -1,6 +1,7 @@
 package com.plugin.Events.Hub;
 
 import com.plugin.Constants.defaultValues;
+import com.plugin.Items.ItemAPI;
 import com.plugin.MainPlugin;
 import com.plugin.PluginMessage;
 import com.plugin.Rank.RankAPI;
@@ -9,6 +10,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,11 +57,14 @@ public class BasicHubSystem implements Listener {
 		pos.setYaw(0);
 
 		p.teleport(pos);
+
+		p.getInventory().addItem(ItemAPI.createGuiItem(Material.COMPASS, "&9Server Selector"));
 	}
 	
 	@EventHandler
 	public static void noDamage(EntityDamageEvent e) {
-		if(e.getEntity().getWorld().equals(defaultValues.hub)) {
+		defaultValues.reloadServerPlayers("Hub");
+		if(defaultValues.serverPlayers.get("Hub").contains(e.getEntity().getName())) {
 			if(e.getEntity() instanceof Player) {
 				Player p = (Player) e.getEntity();
 				p.setHealth(20);
@@ -70,21 +75,24 @@ public class BasicHubSystem implements Listener {
 	
 	@EventHandler
 	public static void drop(PlayerDropItemEvent e) {
-		if(e.getPlayer().getWorld().equals(defaultValues.hub)) {
+		defaultValues.reloadServerPlayers("Hub");
+		if(defaultValues.serverPlayers.get("Hub").contains(e.getPlayer().getName())) {
 			e.setCancelled(true);
 		}
 	}
 	
 	@EventHandler
 	public static void swapHands(PlayerSwapHandItemsEvent e) {
-		if(e.getPlayer().getWorld().equals(defaultValues.hub)) {
+		defaultValues.reloadServerPlayers("Hub");
+		if(defaultValues.serverPlayers.get("Hub").contains(e.getPlayer().getName())) {
 			e.setCancelled(true);
 		}
 	}
 	
 	@EventHandler
 	public static void hunger(FoodLevelChangeEvent e) {
-		if(e.getFoodLevel() < 20 && e.getEntity().getWorld().equals(defaultValues.hub)) {
+		defaultValues.reloadServerPlayers("Hub");
+		if(e.getFoodLevel() < 20 && defaultValues.serverPlayers.get("Hub").contains(e.getEntity().getName())) {
 			e.setCancelled(true);
 		}
 	}
@@ -92,7 +100,8 @@ public class BasicHubSystem implements Listener {
 	@EventHandler
 	public static void breakBlock(BlockBreakEvent e) {
 		Player p = e.getPlayer();
-		if(p.getWorld().equals(defaultValues.hub)) {
+		defaultValues.reloadServerPlayers("Hub");
+		if(defaultValues.serverPlayers.get("Hub").contains(e.getPlayer().getName())) {
 			if(p.getGameMode() != GameMode.CREATIVE) {
 				e.setCancelled(true);
 				p.sendMessage(defaultValues.denyMsg);
@@ -103,7 +112,8 @@ public class BasicHubSystem implements Listener {
 	@EventHandler
 	public static void place(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
-		if(p.getWorld().equals(defaultValues.hub)) {
+		defaultValues.reloadServerPlayers("Hub");
+		if(defaultValues.serverPlayers.get("Hub").contains(e.getPlayer().getName())) {
 			if(p.getGameMode() != GameMode.CREATIVE) {
 				e.setCancelled(true);
 				p.sendMessage(defaultValues.denyMsg);
